@@ -1,0 +1,775 @@
+/* =========================================================
+   GALERI PAGE - MODERN DESIGN
+   ========================================================= */
+
+.gallery-page {
+    margin: 0;
+    padding: 0;
+    background: #f7f7fa;
+    color: #15151c;
+    font-family: "Google Sans", "Inter", sans-serif;
+}
+
+/* =========================================================
+   HERO GALERI
+   ========================================================= */
+
+.gallery-hero {
+    position: relative;
+    min-height: 450px;
+
+    display: flex;
+    align-items: center;
+
+    padding-top: 100px;
+
+    background: linear-gradient(
+        115deg,
+        rgba(10, 10, 17, 0.97) 0%,
+        rgba(18, 16, 31, 0.93) 48%,
+        rgba(39, 29, 75, 0.88) 100%
+    );
+
+    overflow: hidden;
+}
+
+/* Dekorasi */
+.gallery-hero::before {
+    content: "";
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    right: -170px;
+    top: -180px;
+
+    border-radius: 50%;
+
+    background: rgba(139, 108, 255, 0.14);
+
+    filter: blur(10px);
+}
+
+.gallery-hero::after {
+    content: "";
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    left: -100px;
+    bottom: -150px;
+
+    border-radius: 50%;
+
+    background: rgba(139, 108, 255, 0.1);
+
+    filter: blur(15px);
+}
+
+.gallery-hero-content {
+    position: relative;
+    z-index: 2;
+
+    max-width: 750px;
+
+    padding: 70px 0;
+}
+
+.gallery-hero-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+    color: #b7a7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.gallery-hero-label span {
+    width: 32px;
+    height: 2px;
+
+    background: #9c86ff;
+
+    border-radius: 10px;
+}
+
+.gallery-hero h1 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 700;
+    line-height: 1.02;
+
+    letter-spacing: -2.5px;
+}
+
+.gallery-hero h1 span {
+    color: #a991ff;
+}
+
+.gallery-hero p {
+    max-width: 590px;
+
+    margin: 25px 0 0;
+
+    color: #aaa9b7;
+
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* =========================================================
+   GALERI MAIN
+   ========================================================= */
+
+.gallery-main {
+    padding: 80px 0 100px;
+    background: #f7f7fa;
+}
+
+/* Header */
+.gallery-section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 35px;
+}
+
+.gallery-section-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #8871e8;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1.8px;
+}
+
+.gallery-section-header h2 {
+    margin: 0;
+
+    color: #15151c;
+
+    font-size: 30px;
+    font-weight: 700;
+
+    letter-spacing: -0.8px;
+}
+
+.gallery-count {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+
+    color: #9696a2;
+
+    font-size: 12px;
+}
+
+.gallery-count strong {
+    color: #1b1b24;
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   GALLERY GRID
+   ========================================================= */
+
+.gallery-modern-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 24px;
+}
+
+/* Card */
+.gallery-modern-card {
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(20, 20, 30, 0.06);
+
+    border-radius: 20px;
+
+    box-shadow: 0 5px 25px rgba(20, 20, 30, 0.045);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.gallery-modern-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow: 0 18px 40px rgba(20, 20, 30, 0.1);
+}
+
+/* Image */
+.gallery-modern-image {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    height: 300px;
+
+    padding: 0;
+
+    border: 0;
+
+    overflow: hidden;
+
+    background: #e8e8ed;
+
+    cursor: pointer;
+}
+
+.gallery-modern-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition: transform 0.6s ease;
+}
+
+.gallery-modern-card:hover .gallery-modern-image img {
+    transform: scale(1.06);
+}
+
+/* Overlay */
+.gallery-modern-overlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #ffffff;
+
+    background: rgba(12, 11, 20, 0.48);
+
+    opacity: 0;
+
+    transition: opacity 0.3s ease;
+}
+
+.gallery-modern-card:hover .gallery-modern-overlay {
+    opacity: 1;
+}
+
+.gallery-view-button {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255, 255, 255, 0.16);
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    border-radius: 50%;
+
+    backdrop-filter: blur(8px);
+
+    font-size: 16px;
+}
+
+.gallery-modern-overlay span {
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: 0.3px;
+}
+
+/* =========================================================
+   INFO CARD
+   ========================================================= */
+
+.gallery-modern-info {
+    min-height: 115px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 18px 20px;
+}
+
+.gallery-modern-category {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #927bf0;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: 1.3px;
+}
+
+.gallery-modern-info h3 {
+    margin: 0;
+
+    color: #181820;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    line-height: 1.35;
+
+    overflow-wrap: anywhere;
+}
+
+.gallery-modern-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-top: 14px;
+
+    color: #9a9aa5;
+
+    font-size: 10px;
+}
+
+.gallery-modern-date i {
+    color: #927bf0;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.gallery-empty {
+    grid-column: 1 / -1;
+
+    padding: 90px 20px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px dashed #d8d8df;
+
+    border-radius: 20px;
+}
+
+.gallery-empty-icon {
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    color: #927bf0;
+
+    background: #f1edff;
+
+    border-radius: 18px;
+
+    font-size: 25px;
+}
+
+.gallery-empty h3 {
+    margin-bottom: 7px;
+
+    color: #20202a;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.gallery-empty p {
+    margin: 0;
+
+    color: #9696a2;
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   POPUP GALERI
+   ========================================================= */
+
+.gallery-popup-modal {
+    background: rgba(5, 5, 10, 0.25);
+}
+
+.gallery-popup-dialog {
+    width: calc(100% - 30px);
+    max-width: 900px;
+
+    margin: 15px auto;
+}
+
+.gallery-popup-content {
+    overflow: hidden;
+
+    border: 0;
+
+    border-radius: 24px;
+
+    background: #0b0b10;
+
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+.gallery-popup {
+    position: relative;
+
+    width: 100%;
+    height: 590px;
+
+    overflow: hidden;
+}
+
+.gallery-popup-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    background: #101014;
+}
+
+.gallery-popup-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.48) 0%,
+        transparent 30%,
+        transparent 48%,
+        rgba(0, 0, 0, 0.88) 100%
+    );
+
+    pointer-events: none;
+}
+
+/* Close */
+.gallery-popup-close {
+    position: absolute;
+
+    top: 18px;
+    right: 18px;
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    color: #ffffff;
+
+    background: rgba(0, 0, 0, 0.28);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 50%;
+
+    backdrop-filter: blur(8px);
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    transition: all 0.2s ease;
+}
+
+.gallery-popup-close:hover {
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    transform: rotate(90deg);
+}
+
+/* Brand */
+.gallery-popup-top {
+    position: absolute;
+
+    top: 22px;
+    left: 25px;
+
+    z-index: 4;
+}
+
+.gallery-popup-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.gallery-popup-brand img {
+    width: 38px;
+    height: 38px;
+
+    object-fit: contain;
+}
+
+.gallery-popup-brand strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+}
+
+.gallery-popup-brand span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+}
+
+/* Information */
+.gallery-popup-info {
+    position: absolute;
+
+    left: 30px;
+    right: 30px;
+    bottom: 27px;
+
+    z-index: 4;
+}
+
+.gallery-popup-meta {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    margin-bottom: 12px;
+
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: 10px;
+    font-weight: 500;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+.gallery-popup-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.gallery-popup-meta i {
+    color: #b5a3ff;
+}
+
+.gallery-popup-title {
+    max-width: 650px;
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-family: "Google Sans", "Inter", sans-serif;
+
+    font-size: clamp(32px, 4vw, 50px);
+
+    font-weight: 700;
+
+    line-height: 1.05;
+
+    letter-spacing: -0.8px;
+
+    overflow-wrap: anywhere;
+}
+
+.gallery-popup-description {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 16px;
+}
+
+.gallery-popup-line {
+    width: 28px;
+    height: 1px;
+
+    flex-shrink: 0;
+
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.gallery-popup-description p {
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.58);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991px) {
+    .gallery-modern-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-hero {
+        min-height: 410px;
+    }
+}
+
+@media (max-width: 767px) {
+    .gallery-hero {
+        min-height: 390px;
+
+        padding-top: 90px;
+    }
+
+    .gallery-hero-content {
+        padding: 55px 0;
+    }
+
+    .gallery-hero h1 {
+        font-size: 45px;
+        letter-spacing: -1.8px;
+    }
+
+    .gallery-main {
+        padding: 60px 0 75px;
+    }
+
+    .gallery-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+
+        margin-bottom: 28px;
+    }
+
+    .gallery-modern-grid {
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+    }
+
+    .gallery-modern-image {
+        height: 280px;
+    }
+
+    .gallery-popup {
+        height: 520px;
+    }
+
+    .gallery-popup-info {
+        left: 22px;
+        right: 22px;
+        bottom: 22px;
+    }
+
+    .gallery-popup-title {
+        font-size: 34px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-hero h1 {
+        font-size: 39px;
+    }
+
+    .gallery-hero p {
+        font-size: 12px;
+    }
+
+    .gallery-modern-image {
+        height: 245px;
+    }
+
+    .gallery-popup-dialog {
+        width: calc(100% - 20px);
+    }
+
+    .gallery-popup {
+        height: 470px;
+    }
+
+    .gallery-popup-top {
+        left: 18px;
+        top: 18px;
+    }
+
+    .gallery-popup-close {
+        top: 15px;
+        right: 15px;
+    }
+
+    .gallery-popup-info {
+        left: 18px;
+        right: 18px;
+        bottom: 18px;
+    }
+
+    .gallery-popup-title {
+        font-size: 28px;
+    }
+
+    .gallery-popup-meta {
+        gap: 10px;
+
+        font-size: 8px;
+    }
+
+    .gallery-popup-description {
+        margin-top: 12px;
+    }
+}

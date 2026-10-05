@@ -1,256 +1,611 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Berita & Informasi - SMK Negeri 4 Kota Bogor</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap 5 & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    @vite(['resources/css/app.css'])
+    <!-- Laravel Vite -->
+    @vite([
+        'resources/css/app.css',
+        'resources/css/berita.css'
+    ])
 
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-        }
-
-        /* Card Berita Styling Enhancement */
-        .news-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
-        }
-        .news-card img {
-            transition: transform 0.5s ease;
-        }
-        .news-card:hover img {
-            transform: scale(1.05);
-        }
-    </style>
 </head>
-<!-- Menggunakan Flexbox Layout untuk mengunci Sticky Footer -->
+
+
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- Navbar -->
+
+    <!-- =====================================================
+         NAVBAR
+         ===================================================== -->
+
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3 fixed-top">
+
         <div class="container">
-            <!-- Logo di Kiri (Logo Sekolah & Logo FrameProject) -->
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{{ url('/') }}">
-            <img src="{{ asset('images/logo-smkn4.svg') }}" alt="Logo SMKN 4 Bogor" height="40">
-            
-            <!-- Garis Pembatas Tipis -->
-            <div class="border-end border-white opacity-50 my-1" style="height: 24px;"></div>
-            
-            <img src="{{ asset('images/LogoFrame.png') }}" alt="Logo FrameProject" height="35">
-        </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold"
+               href="{{ url('/') }}">
+
+                <img
+                    src="{{ asset('images/logo-smkn4.svg') }}"
+                    alt="Logo SMKN 4 Bogor"
+                    height="40"
+                >
+
+                <div
+                    class="border-end border-white opacity-50 my-1"
+                    style="height: 24px;"
+                ></div>
+
+                <img
+                    src="{{ asset('images/logo-baru.png') }}"
+                    alt="Logo FrameProject"
+                    height="35"
+                >
+
+            </a>
+
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+            >
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+
             <div class="collapse navbar-collapse" id="navbarNav">
+
                 <ul class="navbar-nav position-absolute start-50 translate-middle-x">
+
                     <li class="nav-item">
-                        <a class="nav-link mx-3 {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}#Beranda">Beranda</a>
+
+                        <a
+                            class="nav-link mx-3 {{ request()->is('/') ? 'active' : '' }}"
+                            href="{{ url('/') }}#Beranda"
+                        >
+                            Beranda
+                        </a>
+
                     </li>
+
+
                     <li class="nav-item">
-                        <a class="nav-link mx-3 {{ request()->is('berita*') ? 'active' : '' }}" href="{{ url('/berita') }}">Berita</a>
+
+                        <a
+                            class="nav-link mx-3 {{ request()->is('berita*') ? 'active' : '' }}"
+                            href="{{ url('/berita') }}"
+                        >
+                            Berita
+                        </a>
+
                     </li>
+
+
                     <li class="nav-item">
-                        <a class="nav-link mx-3 {{ request()->is('jurusan*') ? 'active' : '' }}" href="{{ url('/jurusan') }}">Jurusan</a>
+
+                        <a
+                            class="nav-link mx-3 {{ request()->is('jurusan*') ? 'active' : '' }}"
+                            href="{{ url('/jurusan') }}"
+                        >
+                            Jurusan
+                        </a>
+
                     </li>
+
+
                     <li class="nav-item">
-                        <a class="nav-link mx-3 {{ request()->is('galeri*') ? 'active' : '' }}" href="{{ url('/galeri') }}">Galeri</a>
+
+                        <a
+                            class="nav-link mx-3 {{ request()->is('galeri*') ? 'active' : '' }}"
+                            href="{{ url('/galeri') }}"
+                        >
+                            Galeri
+                        </a>
+
                     </li>
+
                 </ul>
 
+
                 <div class="ms-auto">
+
                     @if (Route::has('login'))
+
                         @auth
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-purple border-0 fw-semibold">
-                                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+
+                            <a
+                                href="{{ route('admin.dashboard') }}"
+                                class="btn btn-purple border-0 fw-semibold"
+                            >
+                                <i class="bi bi-speedometer2 me-1"></i>
+                                Dashboard
                             </a>
+
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-purple border-0 fw-semibold">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Masuk
+
+                            <a
+                                href="{{ route('login') }}"
+                                class="btn btn-purple border-0 fw-semibold"
+                            >
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                Masuk
                             </a>
+
                         @endauth
+
                     @endif
+
                 </div>
+
             </div>
+
         </div>
+
     </nav>
 
-    <!-- Header Berita -->
-    <section class="pt-5 mt-5 pb-4 bg-white border-bottom">
-        <div class="container pt-4 text-center">
-            <h1 class="fw-bold text-uppercase" style="letter-spacing: -0.5px; color: #0f172a;">BERITA & INFORMASI SEKOLAH</h1>
-            <p class="text-muted col-md-8 mx-auto small mb-0">
-                Informasi terbaru mengenai agenda kegiatan, kabar prestasi siswa, pengumuman resmi, dan seputar SMKN 4 Kota Bogor.
-            </p>
-        </div>
-    </section>
 
-    <!-- Section Berita Sekolah (flex-grow-1 memaksa isi konten mendorong footer ke bawah) -->
-    <section id="Berita" class="py-5 flex-grow-1">
-        <div class="container py-2">
-            
-            <!-- Grid Cards -->
-            <div class="row g-4 justify-content-center">
-                
-                @forelse ($beritas as $item)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-white news-card">
-                            
-                            <!-- Area Gambar Berita -->
-                            <div class="overflow-hidden rounded-3 mb-3" style="height: 200px;">
-                                @php
-                                    // Pengecekan field gambar/foto dari database
-                                    $fotoPath = $item->foto ?? $item->gambar ?? $item->image ?? null;
-                                @endphp
 
-                                @if($fotoPath)
-                                    <img src="{{ asset('storage/' . $fotoPath) }}" 
-                                         alt="{{ $item->judul }}" 
-                                         class="w-100 h-100" 
-                                         style="object-fit: cover;">
+    <!-- =====================================================
+         HERO BERITA
+         ===================================================== -->
+
+    <main class="news-page">
+
+        <section class="news-hero">
+
+            <div class="container">
+
+                <div class="news-hero-content">
+
+                    <div class="news-hero-label">
+
+                        <span></span>
+
+                        INFORMASI SEKOLAH
+
+                    </div>
+
+
+                    <h1>
+
+                        Berita dan informasi
+                        <span>SMKN 4 Bogor.</span>
+
+                    </h1>
+
+
+                    <p>
+
+                        Temukan informasi terbaru mengenai kegiatan,
+                        prestasi, agenda, pengumuman, dan berbagai kabar
+                        dari SMK Negeri 4 Kota Bogor.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NEWS MAIN
+             ================================================= -->
+
+        <section
+            id="Berita"
+            class="news-main"
+        >
+
+            <div class="container">
+
+
+                <!-- HEADER -->
+
+                <div class="news-section-header">
+
+                    <div>
+
+                        <span class="news-section-label">
+                            BERITA TERBARU
+                        </span>
+
+                        <h2>
+                            Kabar terbaru sekolah
+                        </h2>
+
+                    </div>
+
+
+                    <div class="news-count">
+
+                        <strong>
+                            {{ $beritas->count() }}
+                        </strong>
+
+                        berita
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- GRID -->
+
+                <div class="news-modern-grid">
+
+
+                    @forelse ($beritas as $item)
+
+
+                        @php
+
+                            $fotoPath =
+                                $item->foto
+                                ?? $item->gambar
+                                ?? $item->image
+                                ?? null;
+
+                            $isiBerita =
+                                $item->isi
+                                ?? $item->ringkasan
+                                ?? $item->deskripsi
+                                ?? '';
+
+                            $beritaUrl =
+                                url('/berita/' . ($item->slug ?? $item->id));
+
+                        @endphp
+
+
+
+                        <!-- CARD -->
+
+                        <article class="news-modern-card">
+
+
+                            <!-- IMAGE -->
+
+                            <div class="news-modern-image">
+
+
+                                @if ($fotoPath)
+
+                                    <img
+                                        src="{{ asset('storage/' . $fotoPath) }}"
+                                        alt="{{ $item->judul }}"
+                                    >
+
                                 @else
-                                    <img src="{{ asset('images/hero-sekolah.jpg') }}" 
-                                         alt="{{ $item->judul }}" 
-                                         class="w-100 h-100" 
-                                         style="object-fit: cover;">
+
+                                    <img
+                                        src="{{ asset('images/hero-sekolah.jpg') }}"
+                                        alt="{{ $item->judul }}"
+                                    >
+
                                 @endif
+
+
+                                <!-- CATEGORY -->
+
+                                <div class="news-category">
+
+                                    BERITA SEKOLAH
+
+                                </div>
+
+
+                                <!-- HOVER -->
+
+                                <a
+                                    href="{{ $beritaUrl }}"
+                                    class="news-modern-overlay text-decoration-none"
+                                    aria-label="Baca {{ $item->judul }}"
+                                >
+
+                                    <div class="news-read-icon">
+
+                                        <i class="bi bi-arrow-up-right"></i>
+
+                                    </div>
+
+                                </a>
+
+
                             </div>
-                            
-                            <!-- Body Card -->
-                            <div class="card-body p-0 d-flex flex-column">
-                                <h5 class="fw-bold text-dark mb-2">{{ $item->judul }}</h5>
-                                
-                                <p class="text-muted small mb-3 flex-grow-1" style="line-height: 1.6;">
-                                    {{ Str::limit(strip_tags($item->isi ?? $item->ringkasan ?? $item->deskripsi), 120) }}
+
+
+
+                            <!-- INFORMATION -->
+
+                            <div class="news-modern-info">
+
+
+                                <!-- DATE -->
+
+                                <div class="news-modern-date">
+
+                                    <i class="bi bi-calendar3"></i>
+
+                                    {{ $item->created_at->format('d F Y') }}
+
+                                </div>
+
+
+                                <!-- TITLE -->
+
+                                <h3>
+
+                                    {{ $item->judul }}
+
+                                </h3>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <p class="news-modern-description">
+
+                                    {{ Str::limit(strip_tags($isiBerita), 130) }}
+
                                 </p>
 
-                                <span class="text-secondary small mb-3" style="font-size: 0.8rem;">
-                                    <i class="bi bi-calendar3 me-1"></i> {{ $item->created_at->format('d F Y') }}
-                                </span>
 
-                                <div>
-                                    <a href="{{ url('/berita/' . ($item->slug ?? $item->id)) }}" class="text-primary text-decoration-none fw-semibold d-inline-flex align-items-center gap-2">
-                                        Baca selengkapnya <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
                             </div>
 
+                        </article>
+
+
+                    @empty
+
+
+                        <!-- EMPTY STATE -->
+
+                        <div class="news-empty">
+
+                            <div class="news-empty-icon">
+
+                                <i class="bi bi-newspaper"></i>
+
+                            </div>
+
+
+                            <h3>
+                                Belum ada berita
+                            </h3>
+
+
+                            <p>
+                                Belum ada berita terbaru yang
+                                diunggah oleh pihak sekolah.
+                            </p>
+
                         </div>
-                    </div>
-                @empty
-                    <!-- Tampilan Jika Belum Ada Berita di Database -->
-                    <div class="col-12 text-center py-5 text-muted">
-                        <i class="bi bi-newspaper fs-1 d-block mb-2 text-secondary"></i>
-                        <p class="mb-0 fw-semibold">Belum ada berita terbaru yang diunggah.</p>
-                    </div>
-                @endforelse
 
-            </div> <!-- End Row -->
-        </div>
-    </section>
 
-    <!-- Footer (Otomatis terkunci rapat di batas paling bawah) -->
-    <footer class="bg-dark text-white pt-5 pb-4 mt-auto">
-        <div class="container text-center text-md-start">
-            <div class="row g-4">
+                    @endforelse
 
-                <!-- Kolom 1: Profil Sekolah & Logo -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <img src="{{ asset('images/logo-smkn4.svg') }}" alt="Logo SMKN 4 Bogor" height="45">
-                        <h5 class="fw-bold text-white mb-0">SMKN 4 KOTA BOGOR</h5>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+    <footer class="footer-modern">
+
+        <div class="container">
+
+            <div class="footer-modern-main">
+
+                <!-- Brand -->
+                <div class="footer-brand-modern">
+
+                    <div class="footer-brand-logo">
+
+                        <img src="{{ asset('images/logo-smkn4.svg') }}"
+                            alt="Logo SMKN 4 Bogor">
+
+                        <div>
+
+                            <h5>
+                                SMKN 4 KOTA BOGOR
+                            </h5>
+
+                            <span>
+                                Pendidikan kejuruan masa depan.
+                            </span>
+
+                        </div>
+
                     </div>
-                    <p class="text-secondary small leading-relaxed">
-                        Mencetak generasi unggul dalam teknologi, berkarakter, dan siap bersaing di masa depan melalui pendidikan kejuruan yang berkualitas.
+
+
+                    <p>
+                        Mencetak generasi unggul dalam teknologi,
+                        berkarakter, dan siap bersaing di masa depan
+                        melalui pendidikan kejuruan yang berkualitas.
                     </p>
-                    <!-- Sosmed Icons -->
-                    <div class="d-flex gap-3 mt-3">
-                        <a href="https://www.facebook.com/smknegeri4bogor/?locale=id_ID" class="text-white bg-secondary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 38px; height: 38px;">
+
+
+                    <div class="footer-social-modern">
+
+                        <a href="https://www.facebook.com/smknegeri4bogor/?locale=id_ID"
+                            target="_blank"
+                            aria-label="Facebook">
+
                             <i class="bi bi-facebook"></i>
+
                         </a>
-                        <a href="https://www.instagram.com/smkn4kotabogor/" class="text-white bg-secondary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 38px; height: 38px;">
+
+                        <a href="https://www.instagram.com/smkn4kotabogor/"
+                            target="_blank"
+                            aria-label="Instagram">
+
                             <i class="bi bi-instagram"></i>
+
                         </a>
-                        <a href="https://www.youtube.com/@smknegeri4bogor905" class="text-white bg-secondary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 38px; height: 38px;">
+
+                        <a href="https://www.youtube.com/@smknegeri4bogor905"
+                            target="_blank"
+                            aria-label="YouTube">
+
                             <i class="bi bi-youtube"></i>
+
                         </a>
+
                     </div>
+
                 </div>
 
-                <!-- Kolom 2: Navigasi Cepat -->
-                <div class="col-lg-2 col-md-6">
-                    <h6 class="fw-bold text-uppercase mb-3 text-primary">Navigasi</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href="{{ url('/') }}#Beranda" class="text-secondary text-decoration-none">Beranda</a></li>
-                        <li><a href="#tentang" class="text-secondary text-decoration-none">Tentang Sekolah</a></li>
-                        <li><a href="#Berita" class="text-secondary text-decoration-none">Berita Sekolah</a></li>
-                        <li><a href="#jurusan" class="text-secondary text-decoration-none">Program Keahlian</a></li>
-                        <li><a href="#galeri" class="text-secondary text-decoration-none">Galeri</a></li>
-                    </ul>
+
+                <!-- Navigation -->
+                <div class="footer-column-modern">
+
+                    <h6>
+                        Navigasi
+                    </h6>
+
+                    <a href="{{ url('/') }}#Beranda">
+                        Beranda
+                    </a>
+
+                    <a href="{{ url('/') }}#tentang">
+                        Tentang Sekolah
+                    </a>
+
+                    <a href="{{ url('/berita') }}">
+                        Berita
+                    </a>
+
+                    <a href="{{ url('/jurusan') }}">
+                        Program Keahlian
+                    </a>
+
+                    <a href="{{ url('/galeri') }}">
+                        Galeri
+                    </a>
+
                 </div>
 
-                <!-- Kolom 3: Jurusan -->
-                <div class="col-lg-3 col-md-6">
-                    <h6 class="fw-bold text-uppercase mb-3 text-primary">Jurusan</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><span class="text-secondary">PPLG (Pengembangan Perangkat Lunak)</span></li>
-                        <li><span class="text-secondary">TKT (Teknik Jaringan Komputer)</span></li>
-                        <li><span class="text-secondary">TO (Teknik Otomotif)</span></li>
-                        <li><span class="text-secondary">TP (Teknik Pengelasan)</span></li>
-                    </ul>
+
+                <!-- Jurusan -->
+                <div class="footer-column-modern">
+
+                    <h6>
+                        Program Keahlian
+                    </h6>
+
+                    <span>PPLG</span>
+                    <span>TJKT</span>
+                    <span>TO</span>
+                    <span>TP</span>
+
                 </div>
 
-                <!-- Kolom 4: Kontak Sekolah -->
-                <div class="col-lg-3 col-md-6">
-                    <h6 class="fw-bold text-uppercase mb-3 text-primary">Kontak Kami</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-3 text-secondary">
-                        <li class="d-flex gap-2">
-                            <i class="bi bi-geo-alt-fill text-primary"></i>
-                            <span>Jl. Raya Tajur, Kp. Muara, RT.03/RW.04, Sindangrasa, Bogor Timur, Kota Bogor</span>
-                        </li>
-                        <li class="d-flex gap-2 align-items-center">
-                            <i class="bi bi-telephone-fill text-primary"></i>
-                            <span>+62 0858 9021 3624</span>
-                        </li>
-                        <li class="d-flex gap-2 align-items-center">
-                            <i class="bi bi-envelope-fill text-primary"></i>
-                            <span>info@smkn4bogor.sch.id</span>
-                        </li>
-                    </ul>
+
+                <!-- Contact -->
+                <div class="footer-column-modern footer-contact-modern">
+
+                    <h6>
+                        Hubungi Kami
+                    </h6>
+
+                    <div class="footer-contact-item">
+
+                        <i class="bi bi-geo-alt-fill"></i>
+
+                        <span>
+                            Jl. Raya Tajur, Kp. Muara,
+                            RT.03/RW.04, Sindangrasa,
+                            Bogor Timur, Kota Bogor
+                        </span>
+
+                    </div>
+
+
+                    <div class="footer-contact-item">
+
+                        <i class="bi bi-telephone-fill"></i>
+
+                        <span>
+                            +62 0858 9021 3624
+                        </span>
+
+                    </div>
+
+
+                    <div class="footer-contact-item">
+
+                        <i class="bi bi-envelope-fill"></i>
+
+                        <span>
+                            info@smkn4bogor.sch.id
+                        </span>
+
+                    </div>
+
                 </div>
 
             </div>
 
-            <hr class="border-secondary my-4 opacity-25">
 
-            <!-- Bottom Copyright -->
-            <div class="row align-items-center small text-secondary">
-                <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
-                    &copy; {{ date('Y') }} SMKN 4 Kota Bogor. All rights reserved.
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <span>Dikembangkan oleh <strong class="text-white">Tim FrameProject</strong></span>
-                </div>
+            <!-- Footer Bottom -->
+            <div class="footer-bottom-modern">
+
+                <span>
+                    © {{ date('Y') }} SMKN 4 Kota Bogor
+                </span>
+
+                <span class="footer-credit">
+                    Dikembangkan oleh
+                    <strong>
+                        Tim GaleriEdukasiDigital
+                    </strong>
+                </span>
+
             </div>
+
         </div>
+
     </footer>
 
+
+
+    <!-- Bootstrap JS -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>

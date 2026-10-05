@@ -3,767 +3,923 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Beranda - SMK Negeri 4 Kota Bogor</title>
 
-    <!-- Google Fonts (Bebas Neue & Google Sans) -->
+    <!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-baru.png') }}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap 5 & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-    <!-- Panggil file CSS Vite -->
-    @vite(['resources/css/app.css'])
+    @vite([
+    'resources/css/app.css',
+    'resources/css/galeri.css'
+    ])
 
     <style>
-        /* Style Tambahan untuk Mobile Responsiveness */
+        :root {
+            --ink: #15122b;
+            --muted: #727086;
+            --purple: #5b35d5;
+            --purple-dark: #4020ad;
+            --purple-soft: #eeeaff;
+            --violet: #7c5ce6;
+            --surface: #ffffff;
+            --soft: #f6f5fb;
+            --line: #e9e7f1;
+            --radius: 26px;
+            --shadow: 0 18px 50px rgba(34, 25, 74, .08);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: #fff;
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Manrope', sans-serif; }
+        a { transition: .25s ease; }
+        .section-space { padding: 105px 0; }
+        .section-soft { background: var(--soft); }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 13px;
+            border: 1px solid #ddd7f8;
+            border-radius: 999px;
+            background: #faf9ff;
+            color: var(--purple);
+            font-size: .78rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .eyebrow::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--purple);
+        }
+        .section-title {
+            margin: 15px 0 10px;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -.045em;
+            line-height: 1.08;
+        }
+        .section-desc {
+            max-width: 680px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+        .btn-purple {
+            background: linear-gradient(135deg, var(--purple), #7451df);
+            color: #fff !important;
+            border: 0;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(91,53,213,.22);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+        .btn-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(91,53,213,.30);
+        }
+
+        /* NAVBAR */
+        .navbar-custom {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(1180px, calc(100% - 32px));
+            padding: 9px 10px;
+            border: 1px solid rgba(255,255,255,.18);
+            border-radius: 20px;
+            background: rgba(16, 13, 32, .60);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 15px 45px rgba(0,0,0,.15);
+            z-index: 1030;
+        }
+        .brand-divider { width: 1px; height: 28px; background: rgba(255,255,255,.3); }
+        .nav-link-custom {
+            position: relative;
+            color: rgba(255,255,255,.72) !important;
+            font-size: .9rem;
+            font-weight: 700;
+            padding: 10px 13px !important;
+            border-radius: 11px;
+        }
+        .nav-link-custom:hover, .nav-link-custom.active {
+            color: #fff !important;
+            background: rgba(255,255,255,.10);
+        }
+        .nav-link-custom.active::after {
+            content: "";
+            position: absolute;
+            left: 13px; right: 13px; bottom: 3px;
+            height: 2px; border-radius: 99px;
+            background: #b8a5ff;
+        }
+
+        /* HERO */
+        .hero-header {
+            position: relative;
+            min-height: 850px;
+            height: 100vh;
+            max-height: 980px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background:
+                linear-gradient(90deg, rgba(12,9,28,.88) 0%, rgba(17,12,37,.68) 42%, rgba(17,12,37,.25) 100%),
+                url('{{ asset('images/hero-sekolah.jpg') }}') center/cover no-repeat;
+        }
+        .hero-header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 25%, rgba(117,79,225,.35), transparent 34%),
+                radial-gradient(circle at 85% 75%, rgba(116,72,221,.18), transparent 30%);
+            pointer-events: none;
+        }
+        .hero-header::after {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 180px;
+            background: linear-gradient(transparent, #fff);
+            pointer-events: none;
+        }
+        .hero-content { position: relative; z-index: 2; padding-top: 85px; }
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 13px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.10);
+            border: 1px solid rgba(255,255,255,.18);
+            color: #fff;
+            font-size: .78rem;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+        }
+        .hero-kicker i { color: #bca9ff; }
+        .hero-title {
+            max-width: 920px;
+            margin: 20px 0 20px;
+            color: #fff;
+            font-family: 'Manrope', sans-serif !important;
+            font-size: clamp(3.7rem, 8vw, 7.6rem);
+            font-weight: 800;
+            letter-spacing: -.065em;
+            line-height: .93;
+        }
+        .hero-title .accent { color: #c7b8ff; }
+        .hero-copy {
+            max-width: 620px;
+            color: rgba(255,255,255,.74);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+        .hero-outline {
+            color:#fff !important;
+            border:1px solid rgba(255,255,255,.28);
+            background:rgba(255,255,255,.08);
+            border-radius:14px;
+            padding:12px 19px;
+            backdrop-filter:blur(10px);
+        }
+        .hero-outline:hover { background:rgba(255,255,255,.15); }
+        .hero-stat {
+            position: absolute;
+            right: 5%;
+            bottom: 100px;
+            z-index: 3;
+            width: 235px;
+            padding: 19px;
+            color:#fff;
+            border:1px solid rgba(255,255,255,.16);
+            background:rgba(20,14,42,.48);
+            backdrop-filter:blur(16px);
+            border-radius:20px;
+        }
+        .hero-stat-number { font-size:2.3rem; font-weight:800; line-height:1; }
+        .hero-stat small { color:rgba(255,255,255,.62); }
+
+        /* ABOUT */
+        .about-image-wrap { position:relative; }
+        .about-image {
+            width:100%; height:520px; object-fit:cover;
+            border-radius:32px;
+            box-shadow: var(--shadow);
+        }
+        .about-badge {
+            position:absolute; left:-18px; bottom:28px;
+            width:190px; padding:17px;
+            border-radius:18px;
+            background:#fff;
+            box-shadow:0 18px 40px rgba(25,18,61,.15);
+        }
+        .about-badge .icon {
+            width:42px;height:42px;border-radius:13px;
+            display:grid;place-items:center;
+            background:var(--purple-soft);color:var(--purple);
+            margin-bottom:10px;
+        }
+        .value-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:25px; }
+        .value-card {
+            padding:19px;
+            border:1px solid var(--line);
+            border-radius:18px;
+            background:#fff;
+        }
+        .value-card i { color:var(--purple); font-size:1.35rem; }
+        .value-card h6 { margin:9px 0 5px; font-weight:800; }
+        .value-card p { margin:0; color:var(--muted); font-size:.84rem; line-height:1.65; }
+
+        /* NEWS */
+        .news-card {
+            height:100%;
+            border:1px solid var(--line);
+            border-radius:24px;
+            overflow:hidden;
+            background:#fff;
+            box-shadow:0 8px 28px rgba(30,20,70,.045);
+            transition:.3s ease;
+        }
+        .news-card:hover { transform:translateY(-7px); box-shadow:var(--shadow); border-color:#dcd5fa; }
+        .news-image-wrap { height:225px; overflow:hidden; position:relative; }
+        .news-image { width:100%;height:100%;object-fit:cover; transition:.5s ease; }
+        .news-card:hover .news-image { transform:scale(1.055); }
+        .news-date {
+            position:absolute; top:14px; left:14px;
+            padding:7px 10px; border-radius:10px;
+            background:rgba(255,255,255,.92);
+            color:var(--purple); font-size:.72rem; font-weight:800;
+            backdrop-filter:blur(10px);
+        }
+        .news-body { padding:22px; }
+        .news-body h5 { font-size:1.08rem; line-height:1.4; font-weight:800; }
+        .news-body p { color:var(--muted); font-size:.88rem; line-height:1.7; }
+        .read-link { color:var(--purple); text-decoration:none; font-size:.85rem; font-weight:800; }
+        .read-link:hover { color:var(--purple-dark); }
+
+        /* PROGRAM */
+        .program-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+        .program-card {
+            min-height:310px; padding:25px;
+            position:relative; overflow:hidden;
+            border:1px solid var(--line);
+            border-radius:24px;
+            background:#fff;
+            transition:.3s ease;
+        }
+        .program-card::after {
+            content:"";
+            position:absolute; width:110px;height:110px;
+            right:-45px;bottom:-45px;border-radius:50%;
+            background:var(--purple-soft); transition:.3s ease;
+        }
+        .program-card:hover { transform:translateY(-6px); box-shadow:var(--shadow); border-color:#d9d0ff; }
+        .program-card:hover::after { transform:scale(1.35); }
+        .program-icon {
+            width:58px;height:58px;border-radius:17px;
+            display:grid;place-items:center;
+            background:var(--purple-soft);color:var(--purple);
+            font-size:1.5rem;margin-bottom:28px;
+        }
+        .program-code { color:var(--purple);font-weight:800;font-size:.76rem;letter-spacing:.12em; }
+        .program-card h5 { margin:8px 0 10px;font-weight:800; }
+        .program-card p { color:var(--muted);font-size:.86rem;line-height:1.7; }
+
+        /* GALLERY */
+        .gallery-card-home {
+            height:390px; position:relative; overflow:hidden;
+            border-radius:26px; background:#eee;
+            cursor:pointer; border:0; padding:0;
+        }
+        .gallery-home-image { width:100%;height:100%;object-fit:cover;transition:.6s ease; }
+        .gallery-card-home::after {
+            content:""; position:absolute; inset:0;
+            background:linear-gradient(180deg,transparent 35%,rgba(11,8,25,.85) 100%);
+        }
+        .gallery-preview:hover .gallery-home-image { transform:scale(1.07); }
+        .gallery-content { position:absolute;z-index:2;left:22px;right:22px;bottom:20px; }
+        .gallery-content h5 { color:#fff;font-weight:800;margin-bottom:5px; }
+        .gallery-content span { color:rgba(255,255,255,.72);font-size:.8rem; }
+        .gallery-zoom-icon {
+            position:absolute;z-index:3;right:17px;top:17px;
+            width:42px;height:42px;border-radius:13px;
+            display:grid;place-items:center;
+            color:#fff;background:rgba(17,12,37,.48);
+            opacity:0; transform:translateY(-5px); transition:.25s ease;
+        }
+        .gallery-preview:hover .gallery-zoom-icon { opacity:1;transform:none; }
+
+        /* RATING */
+        .rating-section {
+            padding:85px 0;
+            background:linear-gradient(135deg,#1a1334 0%,#332071 55%,#5b35d5 100%);
+            color:#fff;
+        }
+        .rating-box {
+            max-width:760px; margin:auto; padding:40px 25px;
+            text-align:center; border:1px solid rgba(255,255,255,.12);
+            border-radius:30px; background:rgba(255,255,255,.07);
+            backdrop-filter:blur(12px);
+        }
+        .star-btn { color:#ffd166; cursor:pointer; transition:.18s ease; font-size:2.1rem; }
+        .star-btn:hover { transform:scale(1.18) rotate(-4deg); }
+        #ratingMessage { max-width:430px; margin:15px auto 0; }
+
+        /* MODAL */
+        .gallery-modal-content { border:0;border-radius:26px;overflow:hidden;background:#fff; }
+        .gallery-modal-image { width:100%;height:620px;object-fit:contain;background:#0d0b16; }
+        .gallery-modal-info { height:100%;padding:28px;display:flex;flex-direction:column; }
+        .gallery-modal-title { color:var(--ink);font-size:1.3rem;font-weight:800;overflow-wrap:anywhere; }
+
+        /* FOOTER */
+        footer { background:#100d1f; }
+        .footer-brand p, footer .text-secondary { color:#9c98ab !important; line-height:1.75; }
+        .footer-title { color:#bba8ff;font-size:.72rem;letter-spacing:.12em;font-weight:800;text-transform:uppercase; }
+        .footer-link { color:#a7a2b5 !important;text-decoration:none; }
+        .footer-link:hover { color:#fff !important; }
+        .social-link {
+            width:40px;height:40px;border-radius:12px;
+            display:grid;place-items:center;
+            color:#fff;text-decoration:none;
+            background:rgba(255,255,255,.08);
+            border:1px solid rgba(255,255,255,.08);
+        }
+        .social-link:hover { background:var(--purple); transform:translateY(-2px); }
+
         @media (max-width: 991.98px) {
-            .navbar-collapse {
-                background: rgba(15, 23, 42, 0.95);
-                backdrop-filter: blur(10px);
-                padding: 1.25rem;
-                border-radius: 1rem;
-                margin-top: 0.75rem;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            }
-            .hero-title {
-                font-size: clamp(42px, 14vw, 90px) !important;
-            }
+            .navbar-custom { top:10px; width:calc(100% - 20px); }
+            .navbar-collapse { margin-top:9px;padding:12px;border-radius:15px;background:rgba(16,13,32,.96); }
+            .hero-header { min-height:780px; }
+            .hero-stat { display:none; }
+            .program-grid { grid-template-columns:repeat(2,1fr); }
+            .about-image { height:430px; }
+            .about-badge { left:15px; }
         }
-        
-        .star-btn {
-            color: #ffc107;
-            cursor: pointer;
-            transition: transform 0.2s;
+        @media (max-width: 767.98px) {
+            .section-space { padding:75px 0; }
+            .hero-header { min-height:760px;height:auto;padding-bottom:80px;background-position:62% center; }
+            .hero-content { padding-top:150px; }
+            .hero-title { font-size:clamp(3.2rem,16vw,5rem); }
+            .hero-copy { font-size:.92rem; }
+            .hero-actions .btn { width:100%; }
+            .program-grid { grid-template-columns:1fr; }
+            .value-row { grid-template-columns:1fr; }
+            .about-image { height:350px; }
+            .about-badge { position:relative; left:0; bottom:auto; margin:-35px 15px 0; width:auto; z-index:2; }
+            .gallery-card-home { height:320px; }
+            .gallery-modal-image { height:330px; }
+            .gallery-modal-info { padding:20px; }
         }
-
-        .star-btn:hover {
-            transform: scale(1.2);
-        }
-
-        /* Card galeri halaman utama */
-.gallery-preview {
-    display: block;
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-}
-
-.gallery-card-home {
-    height: 240px;
-    width: 100%;
-    background: #f5f5f5;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.gallery-home-image {
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.gallery-home-overlay {
-    height: 70%;
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.85) 0%,
-        rgba(0, 0, 0, 0) 100%
-    );
-}
-
-.gallery-preview:hover .gallery-card-home {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15) !important;
-}
-
-.gallery-preview:hover .gallery-home-image {
-    transform: scale(1.06);
-}
-
-.gallery-zoom-icon {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    background: rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.gallery-preview:hover .gallery-zoom-icon {
-    opacity: 1;
-}
-
-/* Modal detail galeri */
-.gallery-modal-content {
-    border: none;
-    border-radius: 18px;
-    overflow: hidden;
-    background: #fff;
-}
-
-.gallery-modal-image {
-    width: 100%;
-    height: 100%;
-    min-height: 420px;
-    max-height: 600px;
-    object-fit: contain;
-    background: #111;
-}
-
-.gallery-modal-info {
-    padding: 24px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.gallery-modal-title {
-    font-size: 19px;
-    font-weight: 700;
-    color: #1e1b4b;
-    overflow-wrap: anywhere;
-}
-
-.gallery-modal-date {
-    font-size: 13px;
-    color: #8b8795;
-}
-
-@media (max-width: 767px) {
-    .gallery-card-home {
-        height: 220px;
-    }
-
-    .gallery-modal-image {
-        min-height: 250px;
-        max-height: 400px;
-    }
-
-    .gallery-modal-info {
-        padding: 20px;
-    }
-}
     </style>
 </head>
+
 <body>
+<header id="Beranda" class="hero-header">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid px-2 px-md-3">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
+                <img src="{{ asset('images/logo-smkn4.svg') }}" alt="Logo SMKN 4 Bogor" style="height:40px;width:auto;">
+                <span class="brand-divider d-none d-sm-block"></span>
+                <img src="{{ asset('images/logo-baru.png') }}" alt="Logo FrameProject" style="height:30px;width:auto;max-width:115px;">
+            </a>
 
-    <!-- Hero Header -->
-    <header id="Beranda" class="hero-header d-flex flex-column justify-content-between position-relative" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.7) 100%), url('{{ asset('images/hero-sekolah.jpg') }}'); min-height: 100vh; background-size: cover; background-position: center;">
-        
-        <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3 fixed-top">
-    <div class="container d-flex align-items-center justify-content-between">
-        
-        <!-- 1. Logo di Kiri -->
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold me-0" href="{{ url('/') }}">
-            <img src="{{ asset('images/logo-smkn4.svg') }}" alt="Logo SMKN 4 Bogor" style="height: 40px; width: auto; max-width: 150px; object-fit: contain;">
-            <div class="border-end border-white opacity-50 my-1 d-none d-sm-block" style="height: 24px;"></div>
-            <img src="{{ asset('images/LogoFrame.png') }}" alt="Logo FrameProject" style="height: 32px; width: auto; max-width: 120px; object-fit: contain;">
-        </a>
-        
-        <!-- Tombol Toggler (Khusus Tampilan HP) -->
-        <button class="navbar-toggler border-0 shadow-none ms-auto me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Buka menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <!-- 2. Container Menu & Tombol -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            
-            <!-- Menu Utama Desktop (Tengah Presisi) -->
-            <ul class="navbar-nav mx-auto d-none d-lg-flex align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link mx-2 {{ request()->is('/') ? 'active' : '' }}" href="#Beranda">Beranda</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-2 {{ request()->is('berita*') ? 'active' : '' }}" href="{{ url('/berita') }}">Berita</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-2 {{ request()->is('jurusan*') ? 'active' : '' }}" href="{{ url('/jurusan') }}">Jurusan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-2 {{ request()->is('galeri*') ? 'active' : '' }}" href="{{ url('/galeri') }}">Galeri</a>
-                </li>
-            </ul>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link nav-link-custom {{ request()->is('/') ? 'active' : '' }}" href="#Beranda">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom {{ request()->is('berita*') ? 'active' : '' }}" href="{{ url('/berita') }}">Berita</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom {{ request()->is('jurusan*') ? 'active' : '' }}" href="{{ url('/jurusan') }}">Jurusan</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom {{ request()->is('galeri*') ? 'active' : '' }}" href="{{ url('/galeri') }}">Galeri</a></li>
+                </ul>
 
-            <!-- Menu Khusus Tampilan HP / Mobile (Collapse) -->
-            <ul class="navbar-nav d-lg-none my-3 text-center border-top border-secondary border-opacity-25 pt-2">
-                <li class="nav-item"><a class="nav-link py-2" href="#Beranda">Beranda</a></li>
-                <li class="nav-item"><a class="nav-link py-2" href="{{ url('/berita') }}">Berita</a></li>
-                <li class="nav-item"><a class="nav-link py-2" href="{{ url('/jurusan') }}">Jurusan</a></li>
-                <li class="nav-item"><a class="nav-link py-2" href="{{ url('/galeri') }}">Galeri</a></li>
-            </ul>
-
-            <!-- 3. Tombol Masuk/Dashboard di Kanan -->
-            <div class="text-center pt-2 pt-lg-0">
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ route('admin.dashboard') }}" class="btn btn-purple border-0 fw-semibold w-100 w-lg-auto px-4 py-2">
-                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-purple px-4 py-2 fw-bold">
+                            <i class="bi bi-grid-1x2-fill me-1"></i> Dashboard
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-purple border-0 fw-semibold w-100 w-lg-auto px-4 py-2">
-                            <i class="bi bi-box-arrow-in-right me-1"></i> Masuk
+                        <a href="{{ route('login') }}" class="btn btn-purple px-4 py-2 fw-bold">
+                            <i class="bi bi-arrow-right-circle me-1"></i> Masuk
                         </a>
                     @endauth
                 @endif
             </div>
-
         </div>
+    </nav>
 
-    </div>
-</nav>
-
-        <!-- Teks Hero Tengah -->
-        <div class="container my-auto pt-5 pb-4 text-center">
-            <div class="row justify-content-center">
-                <div class="col-lg-10 col-12">
-                    <p class="fs-5 fs-md-3 fw-light mb-2 text-white">Selamat Datang Di Website</p>
-                    <h1 class="hero-title fw-bold mb-3 text-white" style="font-family: 'Bebas Neue', sans-serif; font-size: clamp(50px, 11vw, 170px); line-height: 1;">
-                        SMK NEGERI 4<br>Kota Bogor
-                    </h1>
-                    <p class="lead mb-4 text-light col-lg-8 col-md-10 mx-auto fs-6 fs-md-5">
-                        Bersama IbyLab, wujudkan solusi digital yang inovatif, cepat, dan terpercaya untuk masa depan Sekolah Anda.
-                        Mencetak generasi unggul dalam teknologi, berkarakter, dan siap bersaing di Masa Depan.
-                    </p>
-                    <a href="#tentang" class="btn btn-purple btn-lg fw-semibold px-4 py-2 fs-6">
-                        Tentang Sekolah <i class="bi bi-arrow-right ms-2"></i>
+    <div class="container hero-content">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="hero-kicker">
+                    <i class="bi bi-stars"></i>
+                    Website Resmi SMK Negeri 4 Kota Bogor
+                </div>
+                <h1 class="hero-title">
+                    Sekolah Kejuruan.<br>
+                    <span class="accent">Masa Depan Dimulai.</span>
+                </h1>
+                <p class="hero-copy">
+                    Mencetak generasi unggul dalam teknologi, berkarakter, dan siap bersaing di masa depan melalui pendidikan kejuruan yang relevan dengan perkembangan industri.
+                </p>
+                <div class="hero-actions">
+                    <a href="#tentang" class="btn btn-purple px-4 py-3 fw-bold">
+                        Kenali Sekolah Kami <i class="bi bi-arrow-down-short ms-2"></i>
+                    </a>
+                    <a href="{{ url('/berita') }}" class="btn hero-outline px-4 py-3 fw-bold">
+                        Lihat Berita <i class="bi bi-arrow-up-right ms-2"></i>
                     </a>
                 </div>
             </div>
         </div>
+    </div>
 
-    </header>
+    <div class="hero-stat d-none d-xl-block">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-mortarboard-fill text-white"></i>
+            <small>Pendidikan • Kompetensi • Karakter</small>
+        </div>
+        <div class="hero-stat-number">SMKN 4</div>
+        <small>Kota Bogor</small>
+    </div>
+</header>
 
-    <!-- Section Tentang -->
-    <section id="tentang" class="py-5" style="background-color: #f8f9fc;">
-        <div class="container py-2 py-md-4">
+<section id="tentang" class="about-modern section-space">
+    <div class="container">
 
-            <!-- Judul -->
-            <div class="text-center mb-4 mb-md-5">
-                <span class="fw-semibold small text-uppercase" style="color: #2414A2; letter-spacing: 1.5px;">
-                    Tentang Kami
-                </span>
-                <h2 class="fw-bold mt-2 mb-2 fs-3 fs-md-2" style="color: #1e1b4b;">
-                    Mengenal SMKN 4 Bogor
-                </h2>
-                <p class="text-muted mb-0 small fs-md-6">
-                    Sekolah kejuruan yang mempersiapkan siswa untuk masa depan.
-                </p>
-            </div>
+        <div class="about-modern-header">
 
-            <!-- Konten Utama -->
-            <div class="row align-items-center g-4 g-lg-5">
-
-                <!-- Foto -->
-                <div class="col-lg-6">
-                    <div class="position-relative">
-                        <img 
-                            src="{{ asset('images/hero-sekolah.jpg') }}" 
-                            alt="Gedung SMKN 4 Bogor"
-                            class="img-fluid rounded-4 w-100 shadow-sm"
-                            style="max-height: 390px; object-fit: cover;"
-                        >
-
-                        <!-- Label Overlay -->
-                        <div class="position-absolute bottom-0 start-0 m-2 m-md-3 px-3 py-2 px-md-4 py-md-3 bg-white rounded-3 shadow-sm">
-                            <div class="fw-bold fs-6 fs-md-5" style="color: #2414A2;">
-                                SMKN 4 Bogor
-                            </div>
-                            <div class="text-muted small" style="font-size: 0.75rem;">
-                                Pendidikan • Kompetensi • Karakter
-                            </div>
-                        </div>
-                    </div>
+            <div>
+                <div class="about-modern-label">
+                    Tentang Sekolah
                 </div>
 
-                <!-- Informasi -->
-                <div class="col-lg-6">
+                <h2 class="about-modern-title">
+                    Membangun <span>kompetensi</span>, karakter,
+                    dan keberanian untuk berkembang.
+                </h2>
+            </div>
 
-                    <h3 class="fw-bold mb-3 fs-4 fs-md-3" style="color: #1e1b4b;">
-                        Membentuk Generasi Unggul dan Siap Menghadapi Masa Depan
-                    </h3>
+            <p class="about-modern-intro">
+                SMK Negeri 4 Kota Bogor hadir untuk membantu siswa
+                mengembangkan potensi, kompetensi, dan karakter agar
+                siap menghadapi perkembangan teknologi serta dunia kerja.
+            </p>
 
-                    <p class="text-muted mb-4 small fs-md-6" style="line-height: 1.8;">
-                        SMK Negeri 4 Kota Bogor merupakan sekolah menengah kejuruan
-                        yang berkomitmen dalam mengembangkan potensi dan kompetensi
-                        siswa melalui pendidikan yang berkualitas, berkarakter,
-                        serta sesuai dengan kebutuhan dunia kerja dan perkembangan teknologi.
+        </div>
+
+        <div class="about-modern-grid">
+
+            <div class="about-modern-visual">
+
+                <div class="about-modern-image-box">
+
+                    <div class="about-modern-number">
+                        01
+                    </div>
+
+                    <img
+                        src="{{ asset('images/hero-sekolah.jpg') }}"
+                        alt="Gedung SMKN 4 Bogor"
+                        class="about-modern-image"
+                    >
+
+                </div>
+
+                <div class="about-modern-school-card">
+
+                    <div class="icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+
+                    <h6>SMKN 4 Bogor</h6>
+
+                    <p>
+                        Pendidikan kejuruan yang berorientasi
+                        pada masa depan, kompetensi, dan karakter siswa.
                     </p>
 
-                    <!-- Visi & Misi -->
-                    <div class="row g-3 g-md-4">
-
-                        <!-- Visi -->
-                        <div class="col-12 col-md-6">
-                            <div>
-                                <div class="d-flex align-items-center gap-2 mb-2">
-                                    <i class="bi bi-bullseye fs-4" style="color: #2414A2;"></i>
-                                    <h5 class="fw-bold mb-0 fs-6 fs-md-5" style="color: #1e1b4b;">
-                                        Visi
-                                    </h5>
-                                </div>
-
-                                <p class="text-muted small mb-0" style="line-height: 1.7;">
-                                    Menjadi sekolah kejuruan unggulan yang menghasilkan
-                                    lulusan kompeten, berkarakter, dan berdaya saing.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Misi -->
-                        <div class="col-12 col-md-6">
-                            <div>
-                                <div class="d-flex align-items-center gap-2 mb-2">
-                                    <i class="bi bi-compass fs-4" style="color: #2414A2;"></i>
-                                    <h5 class="fw-bold mb-0 fs-6 fs-md-5" style="color: #1e1b4b;">
-                                        Misi
-                                    </h5>
-                                </div>
-
-                                <p class="text-muted small mb-0" style="line-height: 1.7;">
-                                    Memberikan pendidikan berkualitas, mengembangkan
-                                    kompetensi siswa, serta membangun karakter dan
-                                    budaya kerja yang baik.
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
                 </div>
 
             </div>
-        </div>
-    </section>
 
-    <!-- Section Berita Sekolah -->
-<section id="Berita" class="py-4 py-md-5 bg-white">
-    <div class="container py-2 py-md-4">
-        
-        <!-- Judul Section -->
-        <div class="text-center mb-4 mb-md-5">
-            <h2 class="fw-bold text-uppercase fs-3 fs-md-2" style="font-family: 'Google Sans', sans-serif; color: #1e1b4b;">BERITA SEKOLAH</h2>
-            <p class="text-muted small mb-0 px-2" style="font-family: 'Google Sans', sans-serif;">
-                Dapatkan informasi terbaru seputar kegiatan, prestasi, dan pengumuman resmi dari SMK Negeri 4 Kota Bogor.
-            </p>
-        </div>
+            <div class="about-modern-content">
 
-        <!-- 1. TAMPILAN DESKTOP (Grid 3 Kolom - Muncul di Layar Medium/Besar) -->
-        <div class="row g-4 justify-content-center d-none d-md-flex">
-            @forelse ($beritas->take(3) as $item)
-                <div class="col-md-6 col-lg-4 d-flex">
-                    <div class="card w-100 border-0 shadow-sm rounded-4 p-3 bg-white d-flex flex-column">
-                        
-                        <div class="overflow-hidden rounded-3 mb-3" style="height: 200px; width: 100%;">
-                            @php
-                                $fotoPath = $item->foto ?? $item->gambar ?? $item->image ?? null;
-                            @endphp
-
-                            @if($fotoPath)
-                                <img src="{{ asset('storage/' . $fotoPath) }}" alt="{{ $item->judul }}" class="w-100 h-100" style="object-fit: cover;">
-                            @else
-                                <img src="{{ asset('images/hero-sekolah.jpg') }}" alt="{{ $item->judul }}" class="w-100 h-100" style="object-fit: cover;">
-                            @endif
-                        </div>
-                        
-                        <div class="card-body p-0 d-flex flex-column flex-grow-1">
-                            <h5 class="fw-bold text-dark mb-2 fs-5">{{ $item->judul }}</h5>
-                            
-                            <p class="text-muted small mb-3 flex-grow-1" style="line-height: 1.6;">
-                                {{ Str::limit(strip_tags($item->isi ?? $item->ringkasan ?? $item->deskripsi), 100) }}
-                            </p>
-
-                            <span class="text-secondary small mb-3 d-block" style="font-size: 0.8rem;">
-                                <i class="bi bi-calendar3 me-1"></i> {{ $item->created_at->format('d F Y') }}
-                            </span>
-
-                            <div class="mt-auto">
-                                <a href="{{ url('/berita/' . ($item->slug ?? $item->id)) }}" class="text-primary text-decoration-none fw-semibold d-inline-flex align-items-center gap-2 small">
-                                    Baca selengkapnya <i class="bi bi-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="about-modern-small-title">
+                    Mengenal SMKN 4 Bogor
                 </div>
-            @empty
-                <div class="col-12 text-center py-5 text-muted">
-                    <i class="bi bi-newspaper fs-1 d-block mb-2 text-secondary"></i>
-                    <p class="mb-0">Belum ada berita terbaru yang diunggah.</p>
+
+                <h3>
+                    Tempat untuk belajar, berkembang,
+                    dan mempersiapkan masa depan.
+                </h3>
+
+                <p>
+                    SMK Negeri 4 Kota Bogor merupakan sekolah menengah
+                    kejuruan yang berkomitmen mengembangkan potensi siswa
+                    melalui pendidikan berkualitas, pembentukan karakter,
+                    serta kompetensi yang sesuai dengan kebutuhan dunia
+                    kerja dan perkembangan teknologi.
+                </p>
+
+
+                <div class="about-modern-focus">
+
+                    <div class="about-focus-item">
+                        <i class="bi bi-cpu"></i>
+                        Teknologi
+                    </div>
+
+                    <div class="about-focus-item">
+                        <i class="bi bi-person-check"></i>
+                        Kompetensi
+                    </div>
+
+                    <div class="about-focus-item">
+                        <i class="bi bi-heart"></i>
+                        Karakter
+                    </div>
+
+                    <div class="about-focus-item">
+                        <i class="bi bi-briefcase"></i>
+                        Dunia Kerja
+                    </div>
+
                 </div>
-            @endforelse
-        </div>
 
-        <!-- 2. TAMPILAN MOBILE (Slider / Carousel Pakai Tombol - Hanya Muncul di HP) -->
-        <div id="beritaMobileCarousel" class="carousel slide d-md-none" data-bs-ride="carousel">
-            <div class="carousel-inner pb-2">
-                @forelse ($beritas->take(3) as $index => $item)
-                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                        <div class="px-4">
-                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
-                                
-                                <div class="overflow-hidden rounded-3 mb-3" style="height: 200px; width: 100%;">
-                                    @php
-                                        $fotoPath = $item->foto ?? $item->gambar ?? $item->image ?? null;
-                                    @endphp
-
-                                    @if($fotoPath)
-                                        <img src="{{ asset('storage/' . $fotoPath) }}" alt="{{ $item->judul }}" class="w-100 h-100" style="object-fit: cover;">
-                                    @else
-                                        <img src="{{ asset('images/hero-sekolah.jpg') }}" alt="{{ $item->judul }}" class="w-100 h-100" style="object-fit: cover;">
-                                    @endif
-                                </div>
-                                
-                                <div class="card-body p-0 d-flex flex-column">
-                                    <h5 class="fw-bold text-dark mb-2 fs-6">{{ $item->judul }}</h5>
-                                    
-                                    <p class="text-muted small mb-3" style="line-height: 1.6;">
-                                        {{ Str::limit(strip_tags($item->isi ?? $item->ringkasan ?? $item->deskripsi), 100) }}
-                                    </p>
-
-                                    <span class="text-secondary small mb-3 d-block" style="font-size: 0.8rem;">
-                                        <i class="bi bi-calendar3 me-1"></i> {{ $item->created_at->format('d F Y') }}
-                                    </span>
-
-                                    <div>
-                                        <a href="{{ url('/berita/' . ($item->slug ?? $item->id)) }}" class="text-primary text-decoration-none fw-semibold d-inline-flex align-items-center gap-2 small">
-                                            Baca selengkapnya <i class="bi bi-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="text-center py-5 text-muted">
-                        <i class="bi bi-newspaper fs-1 d-block mb-2 text-secondary"></i>
-                        <p class="mb-0">Belum ada berita terbaru yang diunggah.</p>
-                    </div>
-                @endforelse
             </div>
 
-            <!-- Tombol Panah Kiri & Kanan (HP) -->
+        </div>
+
+    </div>
+</section>
+
+<section id="Berita" class="section-space section-soft">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-5">
+            <div>
+                <span class="eyebrow">Informasi Terkini</span>
+                <h2 class="section-title mb-0">Berita Sekolah</h2>
+                <p class="section-desc mt-3 mb-0">Informasi terbaru seputar kegiatan, prestasi, dan pengumuman SMK Negeri 4 Kota Bogor.</p>
+            </div>
             @if(isset($beritas) && $beritas->isNotEmpty())
-                <button class="carousel-control-prev" type="button" data-bs-target="#beritaMobileCarousel" data-bs-slide="prev" style="width: 10%;">
-                    <span class="bg-dark rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 35px; height: 35px;">
-                        <i class="bi bi-chevron-left text-white fs-6"></i>
-                    </span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#beritaMobileCarousel" data-bs-slide="next" style="width: 10%;">
-                    <span class="bg-dark rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 35px; height: 35px;">
-                        <i class="bi bi-chevron-right text-white fs-6"></i>
-                    </span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+                <a href="{{ url('/berita') }}" class="btn btn-purple px-4 py-2 fw-bold flex-shrink-0">Semua Berita <i class="bi bi-arrow-up-right ms-1"></i></a>
             @endif
         </div>
 
-        <!-- Tombol "Lihat Semua Berita" (Desktop & HP) -->
-        @if(isset($beritas) && $beritas->isNotEmpty())
-            <div class="text-center mt-4 mt-md-5">
-                <a href="{{ url('/berita') }}" class="btn btn-purple btn-lg fw-semibold px-4 py-2 shadow-sm fs-6">
-                    Lihat Semua Berita <i class="bi bi-chevron-right ms-1"></i>
-                </a>
-            </div>
-        @endif
-
+        <div class="row g-4">
+            @forelse ($beritas->take(3) as $item)
+                @php $fotoPath = $item->foto ?? $item->gambar ?? $item->image ?? null; @endphp
+                <div class="col-md-6 col-lg-4">
+                    <article class="news-card">
+                        <div class="news-image-wrap">
+                            <span class="news-date"><i class="bi bi-calendar3 me-1"></i>{{ $item->created_at->format('d M Y') }}</span>
+                            <img src="{{ $fotoPath ? asset('storage/' . $fotoPath) : asset('images/hero-sekolah.jpg') }}" alt="{{ $item->judul }}" class="news-image">
+                        </div>
+                        <div class="news-body d-flex flex-column">
+                            <h5>{{ $item->judul }}</h5>
+                            <p>{{ Str::limit(strip_tags($item->isi ?? $item->ringkasan ?? $item->deskripsi), 115) }}</p>
+                            <a href="{{ url('/berita/' . ($item->slug ?? $item->id)) }}" class="read-link mt-auto">Baca selengkapnya <i class="bi bi-arrow-right ms-1"></i></a>
+                        </div>
+                    </article>
+                </div>
+            @empty
+                <div class="col-12 text-center py-5 text-muted"><i class="bi bi-newspaper fs-1 d-block mb-2"></i>Belum ada berita terbaru yang diunggah.</div>
+            @endforelse
+        </div>
     </div>
 </section>
 
-<!-- Section Jurusan / Program Keahlian -->
-<section id="jurusan" class="py-4 py-md-5 bg-light">
-    <div class="container py-2 py-md-4">
-        
-        <div class="text-center mb-4 mb-md-5">
-            <h2 class="fw-bold text-uppercase fs-3 fs-md-2" style="letter-spacing: 1px; color: #1e1b4b;">PROGRAM KEAHLIAN</h2>
-            <p class="text-muted small mb-0 px-2" style="font-family: 'Google Sans', sans-serif;">
-                Pilihan jurusan unggulan yang dirancang untuk membekali siswa dengan keahlian praktis sesuai kebutuhan industri modern.
-            </p>
+<section id="jurusan" class="section-space">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="eyebrow">Pilih Keahlianmu</span>
+            <h2 class="section-title">Program Keahlian</h2>
+            <p class="section-desc mx-auto">Pilihan jurusan yang membekali siswa dengan kemampuan praktis dan pengetahuan yang relevan dengan kebutuhan industri modern.</p>
         </div>
 
-        <div class="row g-3 g-md-4">
-            
-            <!-- Jurusan 1: PPLG -->
-            <div class="col-12 col-sm-6 col-lg-3 d-flex">
-                <div class="card w-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column align-items-center">
-                    <div class="rounded-circle bg-primary-subtle text-primary mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; flex-shrink: 0;">
-                        <i class="bi bi-code-slash fs-3"></i>
-                    </div>
-                    <h5 class="fw-bold text-dark mb-1 fs-5">PPLG</h5>
-                    <p class="text-secondary small fw-semibold mb-2">Pengembangan Perangkat Lunak & Gim</p>
-                    <p class="text-muted small mb-0">
-                        Fokus pada pemrograman web, aplikasi mobile, pembuatan gim, dan pengelolaan database modern.
-                    </p>
-                </div>
+        <div class="program-grid">
+            <div class="program-card">
+                <div class="program-icon"><i class="bi bi-code-slash"></i></div>
+                <span class="program-code">01 / PPLG</span>
+                <h5>Pengembangan Perangkat Lunak & Gim</h5>
+                <p>Fokus pada pemrograman web, aplikasi mobile, pembuatan gim, dan pengelolaan database modern.</p>
             </div>
-
-            <!-- Jurusan 2: TJKT -->
-            <div class="col-12 col-sm-6 col-lg-3 d-flex">
-                <div class="card w-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column align-items-center">
-                    <div class="rounded-circle bg-success-subtle text-success mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; flex-shrink: 0;">
-                        <i class="bi bi-diagram-3 fs-3"></i>
-                    </div>
-                    <h5 class="fw-bold text-dark mb-1 fs-5">TJKT</h5>
-                    <p class="text-secondary small fw-semibold mb-2">Teknik Jaringan Komputer & Telekomunikasi</p>
-                    <p class="text-muted small mb-0">
-                        Mempelajari infrastruktur jaringan, server, keamanan siber (cyber security), dan teknologi fiber optik.
-                    </p>
-                </div>
+            <div class="program-card">
+                <div class="program-icon"><i class="bi bi-diagram-3"></i></div>
+                <span class="program-code">02 / TJKT</span>
+                <h5>Teknik Jaringan Komputer & Telekomunikasi</h5>
+                <p>Mempelajari infrastruktur jaringan, server, keamanan siber, dan teknologi fiber optik.</p>
             </div>
-
-            <!-- Jurusan 3: TO -->
-            <div class="col-12 col-sm-6 col-lg-3 d-flex">
-                <div class="card w-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column align-items-center">
-                    <div class="rounded-circle bg-warning-subtle text-warning mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; flex-shrink: 0;">
-                        <i class="bi bi-gear-wide-connected fs-3"></i>
-                    </div>
-                    <h5 class="fw-bold text-dark mb-1 fs-5">TO</h5>
-                    <p class="text-secondary small fw-semibold mb-2">Teknik Otomotif</p>
-                    <p class="text-muted small mb-0">
-                        Pendalaman seputar pemeliharaan mesin kendaraan, sistem kelistrikan otomotif, dan teknologi kendaraan terkini.
-                    </p>
-                </div>
+            <div class="program-card">
+                <div class="program-icon"><i class="bi bi-gear-wide-connected"></i></div>
+                <span class="program-code">03 / TO</span>
+                <h5>Teknik Otomotif</h5>
+                <p>Pendalaman seputar pemeliharaan mesin kendaraan, sistem kelistrikan otomotif, dan teknologi kendaraan terkini.</p>
             </div>
-
-            <!-- Jurusan 4: TP -->
-            <div class="col-12 col-sm-6 col-lg-3 d-flex">
-                <div class="card w-100 border-0 shadow-sm rounded-4 p-4 bg-white text-center d-flex flex-column align-items-center">
-                    <div class="rounded-circle bg-danger-subtle text-danger mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; flex-shrink: 0;">
-                        <i class="bi bi-tools fs-3"></i>
-                    </div>
-                    <h5 class="fw-bold text-dark mb-1 fs-5">TP</h5>
-                    <p class="text-secondary small fw-semibold mb-2">Teknik Pengelasan</p>
-                    <p class="text-muted small mb-0">
-                        Menguasai teknik penyambungan logam, fabrikasi struktur baja, dan standar fabrikasi industri.
-                    </p>
-                </div>
+            <div class="program-card">
+                <div class="program-icon"><i class="bi bi-tools"></i></div>
+                <span class="program-code">04 / TP</span>
+                <h5>Teknik Pengelasan</h5>
+                <p>Menguasai teknik penyambungan logam, fabrikasi struktur baja, dan standar fabrikasi industri.</p>
             </div>
-
         </div>
-
     </div>
 </section>
 
-<!-- Section Galeri Sekolah -->
-<section id="galeri" class="py-4 py-md-5 bg-white">
-    <div class="container py-2 py-md-4">
-
-        <div class="text-center mb-4 mb-md-5">
-            <h2 class="fw-bold text-uppercase fs-3 fs-md-2"
-                style="font-family: 'Google Sans', sans-serif; color: #1e1b4b;">
-                GALERI SEKOLAH
-            </h2>
-
-            <p class="text-muted small mb-0 px-2"
-               style="font-family: 'Google Sans', sans-serif;">
-                Dokumentasi kegiatan, fasilitas, dan momen berharga
-                di lingkungan SMK Negeri 4 Kota Bogor.
-            </p>
+<section id="galeri" class="section-space section-soft">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-5">
+            <div>
+                <span class="eyebrow">Dokumentasi</span>
+                <h2 class="section-title mb-0">Galeri Sekolah</h2>
+                <p class="section-desc mt-3 mb-0">Dokumentasi kegiatan, fasilitas, dan momen berharga di lingkungan SMK Negeri 4 Kota Bogor.</p>
+            </div>
+            @if(isset($galeris) && $galeris->isNotEmpty())
+                <a href="{{ url('/galeri') }}" class="btn btn-purple px-4 py-2 fw-bold flex-shrink-0">Lihat Semua <i class="bi bi-arrow-up-right ms-1"></i></a>
+            @endif
         </div>
 
-        <div class="row g-3 g-md-4 justify-content-center">
+        <div class="row g-4">
             @forelse ($galeris->take(3) as $item)
-
                 @php
                     $fotoPath = $item->foto ?? $item->gambar ?? $item->image ?? null;
-
-                    $namaFoto = $item->nama_tempat
-                        ?? $item->judul
-                        ?? $item->nama
-                        ?? $item->keterangan
-                        ?? 'Dokumentasi Sekolah';
-
-                    $fotoUrl = $fotoPath
-                        ? asset('storage/' . $fotoPath)
-                        : asset('images/hero-sekolah.jpg');
-
-                    $tanggalFoto = $item->created_at
-                        ? $item->created_at->format('d M Y')
-                        : '-';
+                    $namaFoto = $item->nama_tempat ?? $item->judul ?? $item->nama ?? $item->keterangan ?? 'Dokumentasi Sekolah';
+                    $fotoUrl = $fotoPath ? asset('storage/' . $fotoPath) : asset('images/hero-sekolah.jpg');
+                    $tanggalFoto = $item->created_at ? $item->created_at->format('d M Y') : '-';
                 @endphp
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <button
-                        type="button"
-                        class="gallery-preview w-100 text-start"
-                        data-bs-toggle="modal"
-                        data-bs-target="#galleryDetailModal"
-                        data-image="{{ $fotoUrl }}"
-                        data-title="{{ $namaFoto }}"
-                        data-date="{{ $tanggalFoto }}"
-                    >
-                        <div class="gallery-card-home position-relative overflow-hidden rounded-4 shadow-sm">
-
-                            <img
-                                src="{{ $fotoUrl }}"
-                                alt="{{ $namaFoto }}"
-                                class="gallery-home-image w-100 h-100"
-                            >
-
-                            <div class="gallery-home-overlay position-absolute bottom-0 start-0 w-100 d-flex flex-column justify-content-end p-3">
-                                <h5 class="text-white fw-bold mb-1 fs-6 text-truncate"
-                                    title="{{ $namaFoto }}">
-                                    {{ $namaFoto }}
-                                </h5>
-
-                                <span class="text-white-50 small">
-                                    <i class="bi bi-calendar3 me-1"></i>
-                                    {{ $tanggalFoto }}
-                                </span>
+                <div class="col-md-6 col-lg-4">
+                    <button type="button" class="gallery-preview w-100 text-start border-0 bg-transparent"
+                        data-bs-toggle="modal" data-bs-target="#galleryDetailModal"
+                        data-image="{{ $fotoUrl }}" data-title="{{ $namaFoto }}" data-date="{{ $tanggalFoto }}">
+                        <div class="gallery-card-home">
+                            <img src="{{ $fotoUrl }}" alt="{{ $namaFoto }}" class="gallery-home-image">
+                            <div class="gallery-content">
+                                <h5>{{ $namaFoto }}</h5>
+                                <span><i class="bi bi-calendar3 me-1"></i>{{ $tanggalFoto }}</span>
                             </div>
-
-                            <div class="gallery-zoom-icon">
-                                <i class="bi bi-arrows-fullscreen"></i>
-                            </div>
+                            <div class="gallery-zoom-icon"><i class="bi bi-arrows-fullscreen"></i></div>
                         </div>
                     </button>
                 </div>
-
             @empty
-                <div class="col-12 text-center py-5 text-muted">
-                    <i class="bi bi-images fs-1 d-block mb-2 text-secondary"></i>
-                    <p class="mb-0">Belum ada foto galeri yang diunggah.</p>
-                </div>
+                <div class="col-12 text-center py-5 text-muted"><i class="bi bi-images fs-1 d-block mb-2"></i>Belum ada foto galeri yang diunggah.</div>
             @endforelse
         </div>
-
-        @if(isset($galeris) && $galeris->isNotEmpty())
-            <div class="text-center mt-4 mt-md-5">
-                <a href="{{ url('/galeri') }}"
-                   class="btn btn-purple btn-lg fw-semibold px-4 py-2 shadow-sm fs-6">
-                    Lihat Selengkapnya
-                    <i class="bi bi-chevron-right ms-1"></i>
-                </a>
-            </div>
-        @endif
-
     </div>
 </section>
 
-<!-- Modal Detail Galeri -->
-<div class="modal fade" id="galleryDetailModal" tabindex="-1"
-     aria-hidden="true">
+<div class="modal fade gallery-popup-modal" id="galleryDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered gallery-popup-dialog">
+        <div class="modal-content gallery-popup-content">
 
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content gallery-modal-content">
+            <div class="gallery-popup">
 
-            <div class="modal-body p-0">
-                <div class="row g-0">
+                <!-- FOTO -->
+                <img
+                    src=""
+                    alt="Foto galeri sekolah"
+                    id="galleryModalImage"
+                    class="gallery-popup-image"
+                >
 
-                    <!-- Gambar -->
-                    <div class="col-md-8 bg-dark">
+                <!-- OVERLAY -->
+                <div class="gallery-popup-overlay"></div>
+
+                <!-- CLOSE -->
+                <button
+                    type="button"
+                    class="gallery-popup-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Tutup"
+                >
+                    <i class="bi bi-x-lg"></i>
+                </button>
+
+                <!-- TOP INFO -->
+                <div class="gallery-popup-top">
+
+                    <div class="gallery-popup-brand">
+
                         <img
-                            src=""
-                            alt="Foto galeri sekolah"
-                            id="galleryModalImage"
-                            class="gallery-modal-image"
+                            src="{{ asset('images/logo-smkn4.svg') }}"
+                            alt="Logo SMKN 4"
                         >
-                    </div>
 
-                    <!-- Informasi -->
-                    <div class="col-md-4">
-                        <div class="gallery-modal-info">
-
-                            <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <img
-                                        src="{{ asset('images/logo-smkn4.svg') }}"
-                                        alt="Logo SMKN 4"
-                                        width="35"
-                                        height="35"
-                                    >
-
-                                    <div>
-                                        <div class="fw-bold small">
-                                            SMKN 4 Bogor
-                                        </div>
-                                        <small class="text-muted">
-                                            Galeri Sekolah
-                                        </small>
-                                    </div>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Tutup"
-                                ></button>
-                            </div>
-
-                            <div class="mt-2">
-                                <h5
-                                    class="gallery-modal-title mb-2"
-                                    id="galleryModalTitle">
-                                </h5>
-
-                                <div class="gallery-modal-date">
-                                    <i class="bi bi-calendar3 me-1"></i>
-                                    <span id="galleryModalDate"></span>
-                                </div>
-                            </div>
-
-                            <div class="mt-auto pt-4">
-                                <div class="border-top pt-3 text-muted small">
-                                    <i class="bi bi-camera me-1"></i>
-                                    Dokumentasi kegiatan SMK Negeri 4 Kota Bogor.
-                                </div>
-                            </div>
-
+                        <div>
+                            <strong>SMKN 4 BOGOR</strong>
+                            <span>GALERI SEKOLAH</span>
                         </div>
+
                     </div>
 
                 </div>
+
+
+                <!-- BOTTOM CONTENT -->
+                <div class="gallery-popup-info">
+
+                    <div class="gallery-popup-meta">
+
+                        <span>
+                            <i class="bi bi-images"></i>
+                            Dokumentasi
+                        </span>
+
+                        <span>
+                            <i class="bi bi-calendar3"></i>
+                            <span id="galleryModalDate"></span>
+                        </span>
+
+                    </div>
+
+
+                    <h3
+                        id="galleryModalTitle"
+                        class="gallery-popup-title"
+                    ></h3>
+
+
+                    <div class="gallery-popup-description">
+
+                        <div class="gallery-popup-line"></div>
+
+                        <p>
+                            SMK Negeri 4 Kota Bogor
+                            <br>
+                            Pendidikan • Kompetensi • Karakter
+                        </p>
+
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
     </div>
 </div>
-    
-<!-- Section Rating Website -->
-<section class="py-4 bg-light border-top">
-    <div class="container text-center">
-        <h6 class="fw-bold mb-2">Beri Penilaian untuk Website Kami</h6>
-        <p class="text-muted small mb-3">
-            Bagaimana pengalaman Anda saat menjelajahi website SMKN 4 Bogor?
-        </p>
 
-        <!-- Bintang Rating -->
-        <div class="star-rating d-inline-flex gap-2 fs-3 mb-2"
-             id="starContainer">
-            <i class="bi bi-star star-btn" data-value="1"></i>
-            <i class="bi bi-star star-btn" data-value="2"></i>
-            <i class="bi bi-star star-btn" data-value="3"></i>
-            <i class="bi bi-star star-btn" data-value="4"></i>
-            <i class="bi bi-star star-btn" data-value="5"></i>
-        </div>
-
-        <!-- Notifikasi -->
-        <div id="ratingMessage"
-             class="alert d-none mt-3 mx-auto small"
-             style="max-width: 400px;"
-             role="alert">
+<section class="rating-section">
+    <div class="container">
+        <div class="rating-box">
+            <span class="eyebrow" style="color:#d0c3ff;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);">Suara Pengunjung</span>
+            <h2 class="mt-3 mb-2 fw-bold">Bagaimana pengalaman Anda?</h2>
+            <p class="mb-4" style="color:rgba(255,255,255,.65);">Berikan penilaian untuk membantu kami terus memperbaiki website SMKN 4 Bogor.</p>
+            <div id="starContainer" class="d-inline-flex gap-2" aria-label="Pilih rating 1 sampai 5">
+                <i class="bi bi-star star-btn" data-value="1" role="button" tabindex="0"></i>
+                <i class="bi bi-star star-btn" data-value="2" role="button" tabindex="0"></i>
+                <i class="bi bi-star star-btn" data-value="3" role="button" tabindex="0"></i>
+                <i class="bi bi-star star-btn" data-value="4" role="button" tabindex="0"></i>
+                <i class="bi bi-star star-btn" data-value="5" role="button" tabindex="0"></i>
+            </div>
+            <div id="ratingMessage" class="alert d-none small" role="alert"></div>
         </div>
     </div>
 </section>
 
-<!-- JavaScript Rating -->
+<footer class="footer-modern">
+    <div class="container">
+
+    <!-- Footer Main -->
+    <div class="footer-modern-main">
+
+        <!-- Brand -->
+        <div class="footer-brand-modern">
+            <div class="footer-brand-logo">
+                <img src="{{ asset('images/logo-smkn4.svg') }}"
+                     alt="Logo SMKN 4 Bogor">
+
+                <div>
+                    <h5>SMKN 4 KOTA BOGOR</h5>
+                    <span>Pendidikan kejuruan masa depan.</span>
+                </div>
+            </div>
+
+            <p>
+                Mencetak generasi unggul dalam teknologi, berkarakter,
+                dan siap bersaing di masa depan melalui pendidikan
+                kejuruan yang berkualitas.
+            </p>
+
+            <div class="footer-social-modern">
+                <a href="https://www.facebook.com/smknegeri4bogor/?locale=id_ID"
+                   target="_blank"
+                   aria-label="Facebook">
+                    <i class="bi bi-facebook"></i>
+                </a>
+
+                <a href="https://www.instagram.com/smkn4kotabogor/"
+                   target="_blank"
+                   aria-label="Instagram">
+                    <i class="bi bi-instagram"></i>
+                </a>
+
+                <a href="https://www.youtube.com/@smknegeri4bogor905"
+                   target="_blank"
+                   aria-label="YouTube">
+                    <i class="bi bi-youtube"></i>
+                </a>
+            </div>
+        </div>
+
+
+        <!-- Navigation -->
+        <div class="footer-column-modern">
+            <h6>Navigasi</h6>
+
+            <a href="#Beranda">Beranda</a>
+            <a href="#tentang">Tentang Sekolah</a>
+            <a href="#Berita">Berita</a>
+            <a href="#jurusan">Program Keahlian</a>
+            <a href="#galeri">Galeri</a>
+        </div>
+
+
+        <!-- Jurusan -->
+        <div class="footer-column-modern">
+            <h6>Program Keahlian</h6>
+
+            <span>PPLG</span>
+            <span>TJKT</span>
+            <span>TO</span>
+            <span>TP</span>
+        </div>
+
+
+        <!-- Contact -->
+        <div class="footer-column-modern footer-contact-modern">
+            <h6>Hubungi Kami</h6>
+
+            <div class="footer-contact-item">
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>
+                    Jl. Raya Tajur, Kp. Muara, RT.03/RW.04,
+                    Sindangrasa, Bogor Timur, Kota Bogor
+                </span>
+            </div>
+
+            <div class="footer-contact-item">
+                <i class="bi bi-telephone-fill"></i>
+                <span>+62 0858 9021 3624</span>
+            </div>
+
+            <div class="footer-contact-item">
+                <i class="bi bi-envelope-fill"></i>
+                <span>info@smkn4bogor.sch.id</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom-modern">
+
+        <span>
+            © {{ date('Y') }} SMKN 4 Kota Bogor
+        </span>
+
+        <span class="footer-credit">
+            Dikembangkan oleh
+            <strong>Tim GaleriEdukasiDigital</strong>
+        </span>
+
+    </div>
+
+</div>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Rating
     const stars = document.querySelectorAll('.star-btn');
     const message = document.getElementById('ratingMessage');
     const starContainer = document.getElementById('starContainer');
-
     let selectedRating = 0;
     let isSubmitting = false;
 
@@ -777,28 +933,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showMessage(text, type) {
         message.className = `alert alert-${type} mt-3 mx-auto small`;
-        message.style.maxWidth = '400px';
         message.textContent = text;
         message.classList.remove('d-none');
     }
 
     stars.forEach(star => {
-        star.style.cursor = 'pointer';
-        star.style.color = '#ffc107';
-
         star.addEventListener('mouseover', function () {
-            if (!isSubmitting && selectedRating === 0) {
-                highlightStars(Number(this.dataset.value));
-            }
+            if (!isSubmitting && selectedRating === 0) highlightStars(Number(this.dataset.value));
         });
-
         star.addEventListener('mouseleave', function () {
             highlightStars(selectedRating);
         });
-
         star.addEventListener('click', async function () {
             if (isSubmitting || selectedRating !== 0) return;
-
             selectedRating = Number(this.dataset.value);
             highlightStars(selectedRating);
             isSubmitting = true;
@@ -812,204 +959,37 @@ document.addEventListener('DOMContentLoaded', function () {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     credentials: 'same-origin',
-                    body: JSON.stringify({
-                        stars: selectedRating
-                    })
+                    body: JSON.stringify({ stars: selectedRating })
                 });
-
                 const data = await response.json();
-
-                if (!response.ok || !data.success) {
-                    throw new Error(data.message || 'Gagal mengirim rating.');
-                }
-
-                showMessage(
-                    data.message || 'Terima kasih telah memberikan rating!',
-                    'success'
-                );
-
+                if (!response.ok || !data.success) throw new Error(data.message || 'Gagal mengirim rating.');
+                showMessage(data.message || 'Terima kasih telah memberikan rating!', 'success');
                 starContainer.style.pointerEvents = 'none';
-                starContainer.style.opacity = '0.7';
-
+                starContainer.style.opacity = '.7';
             } catch (error) {
                 console.error('Rating error:', error);
-
                 selectedRating = 0;
                 highlightStars(0);
-
-                showMessage(
-                    'Maaf, rating gagal dikirim. Silakan coba lagi.',
-                    'danger'
-                );
-
+                showMessage('Maaf, rating gagal dikirim. Silakan coba lagi.', 'danger');
                 isSubmitting = false;
             }
         });
     });
-});
-</script>
 
-<style>
-    .star-btn {
-        transition: transform 0.2s ease;
-    }
-
-    .star-btn:hover {
-        transform: scale(1.15);
-    }
-</style>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white pt-5 pb-4 mt-3">
-        <div class="container text-center text-md-start">
-            <div class="row g-4">
-
-                <!-- Kolom 1 -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-3">
-                        <img src="{{ asset('images/logo-smkn4.svg') }}" alt="Logo SMKN 4 Bogor" height="40">
-                        <h5 class="fw-bold text-white mb-0 fs-6 fs-md-5">SMKN 4 KOTA BOGOR</h5>
-                    </div>
-                    <p class="text-secondary small leading-relaxed">
-                        Mencetak generasi unggul dalam teknologi, berkarakter, dan siap bersaing di masa depan melalui pendidikan kejuruan yang berkualitas.
-                    </p>
-                    <div class="d-flex gap-3 mt-3 justify-content-center justify-content-md-start">
-                        <a href="https://www.facebook.com/smknegeri4bogor/?locale=id_ID" target="_blank" class="text-white bg-secondary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 38px; height: 38px;">
-                            <i class="bi bi-facebook"></i>
-                        </a>
-                        <a href="https://www.instagram.com/smkn4kotabogor/" target="_blank" class="text-white bg-secondary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 38px; height: 38px;">
-                            <i class="bi bi-instagram"></i>
-                        </a>
-                        <a href="https://www.youtube.com/@smknegeri4bogor905" target="_blank" class="text-white bg-secondary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 38px; height: 38px;">
-                            <i class="bi bi-youtube"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Kolom 2 -->
-                <div class="col-6 col-md-6 col-lg-2">
-                    <h6 class="fw-bold text-uppercase mb-3 text-primary small">Navigasi</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href="#Beranda" class="text-secondary text-decoration-none">Beranda</a></li>
-                        <li><a href="#tentang" class="text-secondary text-decoration-none">Tentang Sekolah</a></li>
-                        <li><a href="#Berita" class="text-secondary text-decoration-none">Berita Sekolah</a></li>
-                        <li><a href="#jurusan" class="text-secondary text-decoration-none">Program Keahlian</a></li>
-                        <li><a href="#galeri" class="text-secondary text-decoration-none">Galeri</a></li>
-                    </ul>
-                </div>
-
-                <!-- Kolom 3 -->
-                <div class="col-6 col-md-6 col-lg-3">
-                    <h6 class="fw-bold text-uppercase mb-3 text-primary small">Jurusan</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2 text-secondary">
-                        <li><span>PPLG</span></li>
-                        <li><span>TJKT</span></li>
-                        <li><span>TO</span></li>
-                        <li><span>TP</span></li>
-                    </ul>
-                </div>
-
-                <!-- Kolom 4 -->
-                <div class="col-12 col-md-6 col-lg-3">
-                    <h6 class="fw-bold text-uppercase mb-3 text-primary small">Kontak Kami</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-3 text-secondary">
-                        <li class="d-flex gap-2 justify-content-center justify-content-md-start">
-                            <i class="bi bi-geo-alt-fill text-primary"></i>
-                            <span>Jl. Raya Tajur, Kp. Muara, RT.03/RW.04, Sindangrasa, Bogor Timur, Kota Bogor</span>
-                        </li>
-                        <li class="d-flex gap-2 align-items-center justify-content-center justify-content-md-start">
-                            <i class="bi bi-telephone-fill text-primary"></i>
-                            <span>+62 0858 9021 3624</span>
-                        </li>
-                        <li class="d-flex gap-2 align-items-center justify-content-center justify-content-md-start">
-                            <i class="bi bi-envelope-fill text-primary"></i>
-                            <span>info@smkn4bogor.sch.id</span>
-                        </li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <hr class="border-secondary my-4 opacity-25">
-
-            <div class="row align-items-center small text-secondary">
-                <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
-                    &copy; {{ date('Y') }} SMKN 4 Kota Bogor. All rights reserved.
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <span>Dikembangkan oleh <strong class="text-white">Tim FrameProject</strong></span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const stars = document.querySelectorAll(".star-btn");
-    const avgText = document.getElementById("rating-avg");
-    const totalText = document.getElementById("rating-total");
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    stars.forEach(star => {
-        star.addEventListener("click", function () {
-            const selectedStars = this.getAttribute("data-value");
-
-            fetch('/api/ratings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({ stars: selectedStars })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    
-                    // Update teks angka rata-rata dan total ulasan secara langsung
-                    avgText.innerText = data.average;
-                    totalText.innerText = data.total;
-
-                    // Update tampilan icon bintang terisi (-fill) atau kosong
-                    const roundedAvg = Math.round(data.average);
-                    stars.forEach((s, index) => {
-                        if (index < roundedAvg) {
-                            s.classList.remove("bi-star");
-                            s.classList.add("bi-star-fill");
-                        } else {
-                            s.classList.remove("bi-star-fill");
-                            s.classList.add("bi-star");
-                        }
-                    });
-                }
-            })
-            .catch(err => console.error("Error sending rating:", err));
-        });
-    });
-});
-</script>
-<script>
+    // Gallery modal
     const galleryModal = document.getElementById('galleryDetailModal');
-
-    galleryModal.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget;
-
-        const image = button.getAttribute('data-image');
-        const title = button.getAttribute('data-title');
-        const date = button.getAttribute('data-date');
-
-        document.getElementById('galleryModalImage').src = image;
-        document.getElementById('galleryModalTitle').textContent = title;
-        document.getElementById('galleryModalDate').textContent = date;
-    });
-
-    galleryModal.addEventListener('hidden.bs.modal', function () {
-        document.getElementById('galleryModalImage').src = '';
-    });
+    if (galleryModal) {
+        galleryModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('galleryModalImage').src = button.getAttribute('data-image');
+            document.getElementById('galleryModalTitle').textContent = button.getAttribute('data-title');
+            document.getElementById('galleryModalDate').textContent = button.getAttribute('data-date');
+        });
+        galleryModal.addEventListener('hidden.bs.modal', function () {
+            document.getElementById('galleryModalImage').src = '';
+        });
+    }
+});
 </script>
 </body>
 </html>
